@@ -28,14 +28,14 @@ module Endpoint = struct
 
   let start_link () =
     let handler = Nomad.trail trail in
-    Nomad.start_link ~acceptor_count:1 ~port:8080 ~handler ()
+    Nomad.start_link ~acceptors:10 ~port:8080 ~handler ()
 end
 
 module BazaarApp = struct
   open Supervisor
 
   let start () =
-    Logger.set_log_level (Some Trace);
+    Logger.set_log_level (Some Info);
     start_link ~child_specs:[ child_spec Endpoint.start_link () ] ()
 end
 
