@@ -1,0 +1,6 @@
+(executable
+ (public_name bazaar)
+ (name bazaar)
+ (libraries trail nomad unix))
+
+(env (release (flags (:standard -ccopt -static -cclib -no-pie))))

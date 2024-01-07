@@ -1,0 +1,8 @@
+lib: [
+  "_build/install/default/lib/bazaar/META"
+  "_build/install/default/lib/bazaar/dune-package"
+  "_build/install/default/lib/bazaar/opam"
+]
+bin: [
+  "_build/install/default/bin/bazaar"
+]
