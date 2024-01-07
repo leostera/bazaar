@@ -26,7 +26,7 @@ prepare-release:
 
   # BUILD APP
   COPY . .
-  RUN eval $(opam env) && dune build --release @all
+  RUN eval $(opam env) && dune build --profile=docker @all
   SAVE ARTIFACT /app/_build/default/bazaar/bazaar.exe
     
 docker:

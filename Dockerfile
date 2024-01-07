@@ -26,7 +26,7 @@ RUN opam install --deps-only --with-test ./bazaar.opam
 
 # BUILD APP
 COPY . .
-RUN eval $(opam env) && dune build --release @all
+RUN eval $(opam env) && dune build --profile=docker @all
 
 FROM scratch
 COPY --from=0 /app/_build/default/bazaar/bazaar.exe /bin/bazaar

@@ -3,4 +3,5 @@
  (name bazaar)
  (libraries trail nomad unix))
 
-(env (release (flags (:standard -ccopt -static -cclib -no-pie))))
+(env 
+  (docker (flags (:standard -ccopt -static -cclib -no-pie))))
