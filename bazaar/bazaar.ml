@@ -1,34 +1,17 @@
 open Riot
 
-module Stats = struct
-  type Message.t += Print_stats
-
-  let rec print_stats () =
-    (match receive () with
-    | Print_stats ->
-        let accept, recv, send, connect = Runtime.syscalls () in
-        Logger.error (fun f ->
-            f "accept=%d recv=%d send=%d connect=%d" accept recv send connect)
-    | _ -> ());
-    print_stats ()
-
-  let start () =
-    let pid = spawn_link (fun () -> print_stats ()) in
-    Ok pid
-end
-
 module Endpoint = struct
   let trail =
     Trail.
       [
         logger ~level:Debug ();
         request_id { kind = Uuid_v4 };
-        (fun conn -> conn |> Conn.send_response `OK "hello world!");
+        (fun conn -> conn |> Conn.send_response `OK {%b|"hello world!"::bytes|});
       ]
 
   let start_link () =
     let handler = Nomad.trail trail in
-    Nomad.start_link ~acceptors:10 ~port:8080 ~handler ()
+    Nomad.start_link ~port:8080 ~handler ()
 end
 
 module BazaarApp = struct
@@ -41,5 +24,5 @@ end
 
 let () =
   Riot.start
-    ~apps:[ (module Riot.Logger); (module BazaarApp); (module Stats) ]
+    ~apps:[ (module Riot.Logger); (module BazaarApp)]
     ()

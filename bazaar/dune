@@ -1,7 +1,10 @@
 (executable
  (public_name bazaar)
  (name bazaar)
+ (preprocess (pps bytestring.ppx))
  (libraries trail nomad unix))
 
-(env 
-  (docker (flags (:standard -ccopt -static -cclib -no-pie))))
+(env
+ (docker
+  (flags
+   (:standard -ccopt -static -cclib -no-pie))))

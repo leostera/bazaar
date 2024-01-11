@@ -15,8 +15,12 @@ RUN ln -f /usr/bin/opam-2.1 /usr/bin/opam
 RUN opam --version
 RUN opam init
 
-RUN echo "cache-version: 0"
+RUN echo "cache-version: 4"
+RUN opam pin io.0.0.8 git+https://github.com/leostera/riot
+RUN opam pin gluon.0.0.8 git+https://github.com/leostera/riot
+RUN opam pin bytestring.0.0.8 git+https://github.com/leostera/riot
 RUN opam pin riot.0.0.8 git+https://github.com/leostera/riot
+RUN echo "cache-version: 3"
 RUN opam pin atacama.0.0.5 git+https://github.com/leostera/atacama
 RUN opam pin trail.0.0.1 git+https://github.com/leostera/trail
 RUN opam pin nomad.0.0.1 git+https://github.com/leostera/nomad
