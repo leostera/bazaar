@@ -6,7 +6,7 @@ module Endpoint = struct
       [
         logger ~level:Debug ();
         request_id { kind = Uuid_v4 };
-        (fun conn -> conn |> Conn.send_response `OK {%b|"hello world!"::bytes|});
+        (fun conn -> conn |> Conn.send_response `OK {%b|"hello world!"|});
       ]
 
   let start_link () =
