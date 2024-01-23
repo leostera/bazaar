@@ -1,8 +1,9 @@
 (executable
  (public_name bazaar)
  (name bazaar)
- (preprocess (pps bytestring.ppx))
- (libraries trail nomad unix))
+ (preprocess
+  (pps bytestring.ppx serde_derive))
+ (libraries trail nomad unix serde serde_json))
 
 (env
  (docker
