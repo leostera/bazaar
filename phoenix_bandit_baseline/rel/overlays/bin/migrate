@@ -1,3 +1,0 @@
-#!/bin/sh
-cd -P -- "$(dirname -- "$0")"
-exec ./phoenix_bandit_baseline eval PhoenixBanditBaseline.Release.migrate

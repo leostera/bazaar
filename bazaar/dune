@@ -1,9 +1,9 @@
 (executable
- (public_name bazaar)
- (name bazaar)
+ (public_name bazaar_live)
+ (name main)
  (preprocess
   (pps bytestring.ppx serde_derive))
- (libraries trail nomad unix serde serde_json))
+ (libraries sidewinder trail nomad unix serde serde_json magic-mime))
 
 (env
  (docker

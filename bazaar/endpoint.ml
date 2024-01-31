@@ -1,9 +1,8 @@
-open Riot
 open Trail
 open Sidewinder
+open Router
 
 let trail =
-  let open Router in
   [
     use (module Logger) Logger.(args ~level:Debug ());
     use (module Sidewinder.Static) ();
