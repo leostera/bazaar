@@ -1,7 +1,8 @@
 (executable
  (public_name bazaar_live)
  (name main)
- (preprocess (pps bytestring.ppx serde_derive))
+ (preprocess
+  (pps bytestring.ppx serde_derive))
  (libraries sidewinder trail nomad unix serde serde_json magic-mime))
 
 (env

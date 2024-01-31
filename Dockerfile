@@ -46,6 +46,6 @@ RUN opam install --deps-only --with-test ./bazaar.opam
 COPY . .
 RUN eval $(opam env) && dune build --release @all
 
-FROM ubuntu:latest as runner
+FROM debian:12-slim as runner
 COPY --from=0 /app/_build/default/bazaar_live/main.exe /bin/bazaar
 CMD ["/bin/bazaar"]
