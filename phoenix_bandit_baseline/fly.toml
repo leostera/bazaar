@@ -1,0 +1,31 @@
+# fly.toml app configuration file generated for phoenix-bandit-baseline on 2024-01-16T17:44:10+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "phoenix-bandit-baseline"
+primary_region = "ams"
+kill_signal = "SIGTERM"
+
+[build]
+
+[env]
+  PHX_HOST = "phoenix-bandit-baseline.fly.dev"
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 1000
+    soft_limit = 1000
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256

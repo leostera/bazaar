@@ -5,4 +5,5 @@ lib: [
 ]
 bin: [
   "_build/install/default/bin/bazaar"
+  "_build/install/default/bin/bazaar_live"
 ]

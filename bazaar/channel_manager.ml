@@ -6,14 +6,14 @@ open Logger.Make (struct
   let namespace = [ "bazaar"; "channel_manager" ]
 end)
 
-type channel = { name : string [@warning "-69"]; clients : Pid.t list }
+type channel = { name : string; [@warning "-69"] clients : Pid.t list }
 
 module Store = Store.Make (struct
   type key = string
   type value = channel
 end)
 
-type state = { channels : (string, channel)  Hashtbl.t }
+type state = { channels : (string, channel) Hashtbl.t }
 
 type Message.t +=
   | Register of { channel : string; client : Pid.t }
@@ -52,10 +52,10 @@ let start_link () =
   register chan_mgr pid;
   Ok pid
 
-let register client ~channel = 
+let register client ~channel =
   let mgr = Process.where_is chan_mgr |> Option.get in
-  send mgr (Register {channel;client})
+  send mgr (Register { channel; client })
 
-let broadcast msg ~channel = 
+let broadcast msg ~channel =
   let mgr = Process.where_is chan_mgr |> Option.get in
-  send mgr (Broadcast {channel;msg})
+  send mgr (Broadcast { channel; msg })

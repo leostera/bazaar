@@ -1,0 +1,32 @@
+<div>
+<button> Say hi! </button>
+<ul>
+</ul>
+</div>
+
+<script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
+<script>
+
+let messages = document.querySelector("ul");
+
+window.Twitch.ext.onAuthorized((auth) => {
+  const url = "wss://bazaar.fly.dev/ws"
+
+  let socket = new WebSocket(url);
+
+  socket.onopen = (event) => {
+    console.log("connected: ", event);
+  };
+
+  socket.onmessage = (event) => {
+    let child = document.createElement("li");
+    child.innerText = event.data;
+    messages.appendChild(child);
+  };
+
+  document.querySelector("button").addEventListener("onclick", () => {
+    socket.send(`${window.Twitch.ext.viewer.id} says hi!`)
+  })
+})
+
+</script>

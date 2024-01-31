@@ -6,22 +6,27 @@ open Riot.Logger.Make (struct
 end)
 
 module Echo_server = struct
+  include Trail.Sock.Default
+
   type args = unit
   type state = int
+  type Message.t += Broadcast of Frame.t
 
   let init _args =
     info (fun f -> f "initialized echo server");
-    Channel_manager.register (self ()) ~channel:"twitch";
     `ok 0
-
-  type Message.t += Broadcast of Frame.t
 
   let handle_frame frame _conn state =
     info (fun f -> f "handling frame: %a" Trail.Frame.pp frame);
-    Channel_manager.broadcast (Broadcast frame) ~channel:"twitch";
-    `push ([], state)
+    let _ =
+      Timer.send_interval (self ()) (Broadcast frame) ~every:100L
+      |> Result.get_ok
+    in
+    (* Channel_manager.broadcast (Broadcast frame) ~channel:"twitch"; *)
+    `push ([ frame ], state)
 
   let handle_message msg state =
+    info (fun f -> f "handling interval message: %S" (Marshal.to_string msg []));
     match msg with
     | Broadcast frame -> `push ([ frame ], state)
     | _ -> `ok state
@@ -112,6 +117,7 @@ module BazaarApp = struct
   open Supervisor
 
   let start () =
+    Runtime.set_log_level (Some Debug);
     set_log_level (Some Trace);
     (* Runtime.Stats.start ~every:1_000_000L (); *)
     start_link

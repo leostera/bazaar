@@ -1,4 +1,5 @@
 (lang dune 3.12)
+(using melange 0.1)
 
 (name bazaar)
 
@@ -19,8 +20,25 @@
  (name bazaar)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml dune trail)
+ (depends 
+   (nomad (>= "0.0.1"))
+   (riot (>= "0.0.8"))
+   (serde (>= "0.0.1"))
+   (serde_derive (>= "0.0.1"))
+   (serde_json (>= "0.0.1"))
+   (trail (>= "0.0.1"))
+   dune 
+   ocaml
+   melange)
  (tags
   (topics "to describe" your project)))
 
-; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
+(dialect
+ (name mlx)
+ (implementation
+  (extension mlx)
+  (preprocess (with-stdin-from %{input-file} (run mlx))))
+ (interface
+  (extension mlxi)
+  (preprocess (with-stdin-from %{input-file} (run mlx))))
+ )

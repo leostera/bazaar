@@ -1,0 +1,16 @@
+open Riot
+open Trail
+open Sidewinder.Html
+
+let page =
+  <html>
+    <body>
+      <Counter.mount path="/counter"/>
+      <Counter.mount path="/counter"/>
+      <Counter.mount path="/counter"/>
+      <Counter.mount path="/counter"/>
+    </body>
+  </html>
+
+let show (conn : Conn.t) =
+  conn |> Conn.send_response `OK (Sidewinder.Html.to_string page |> Bytestring.of_string)
