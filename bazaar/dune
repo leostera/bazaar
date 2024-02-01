@@ -5,6 +5,12 @@
   (pps bytestring.ppx serde_derive))
  (libraries sidewinder trail nomad unix serde serde_json magic-mime))
 
+(rule
+ (target assets.ml)
+ (deps ./certs/tls.crt ./certs/tls.key)
+ (action
+  (run ocaml-crunch ./certs --mode=plain --silent --output=%{target})))
+
 (env
  (docker
   (flags

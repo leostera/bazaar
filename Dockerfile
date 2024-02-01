@@ -25,17 +25,17 @@ RUN echo "cache-version: 4"
 RUN opam pin gluon.0.0.8 git+https://github.com/leostera/riot
 RUN echo "cache-version: 1"
 RUN opam pin riot.0.0.8 git+https://github.com/leostera/riot
-RUN echo "cache-version: 7"
+RUN echo "cache-version: 8"
 RUN opam pin atacama.0.0.5 git+https://github.com/leostera/atacama
 RUN opam pin trail.0.0.1 git+https://github.com/leostera/trail
-RUN echo "cache-version: 3"
+RUN echo "cache-version: 4"
 RUN opam pin nomad.0.0.1 git+https://github.com/leostera/nomad
 RUN echo "cache-version: 1"
 RUN opam pin serde.0.0.1 git+https://github.com/leostera/serde.ml
 RUN opam pin serde_derive.0.0.1 git+https://github.com/leostera/serde.ml
 RUN opam pin serde_json.0.0.1 git+https://github.com/leostera/serde.ml
 RUN opam pin mlx.0.0.1 git+https://github.com/leostera/mlx
-RUN echo "cache-version: 3"
+RUN echo "cache-version: 4"
 RUN opam pin sidewinder.0.0.1 git+https://github.com/leostera/trail
 
 # ACTUAL APP DEPS
@@ -47,5 +47,5 @@ COPY . .
 RUN eval $(opam env) && dune build --release @all
 
 FROM debian:12-slim as runner
-COPY --from=0 /app/_build/default/bazaar_live/main.exe /bin/bazaar
+COPY --from=0 /app/_build/default/bazaar/main.exe /bin/bazaar
 CMD ["/bin/bazaar"]
