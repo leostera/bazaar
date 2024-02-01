@@ -1,0 +1,23 @@
+div#counter-1 {
+  background-color: black;
+  padding: 1rem;
+  border-radius: 6px;
+  color: white;
+
+  & button {
+    color: black;
+    border: 1px solid #a95b29;
+    border-radius: 4.5px;
+    padding: 0.7rem 1.3rem;
+    background-color: #ff8e47;
+  }
+
+  & div {
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+    gap: 1.3rem;
+  }
+}
