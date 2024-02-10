@@ -1,0 +1,34 @@
+(dirs :standard \ node_modules)
+
+(library
+ (package bazaar)
+ (name bazaar_js)
+ (modes melange)
+ (libraries melange.dom)
+ (preprocess
+  (pps melange.ppx)))
+
+(alias
+ (name all)
+ (deps
+  (alias_rec bundle)))
+
+(rule
+ (alias bundle)
+ (targets
+  (dir dist))
+ (deps
+  (alias_rec bazaar_js))
+ (action
+  (system
+   "../../../bazaar_js/node_modules/.bin/esbuild output/bazaar_js/main.mjs --bundle --outdir=dist"))
+ (mode
+  (promote (until-clean))))
+
+(melange.emit
+ (target output)
+ (alias bazaar_js)
+ (modules)
+ (libraries bazaar_js)
+ (module_systems
+  (es6 mjs)))

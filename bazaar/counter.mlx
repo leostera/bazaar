@@ -1,18 +1,19 @@
+open Serde
 include Sidewinder.Default
 open Sidewinder.Html
 
-type args = unit
 type state = int
 type action = Incr | Decr
+[@@deriving serializer,deserializer]
 
-let init () = 0
+let mount _conn = 0
 
 let handle_action state action =
   match action with Incr -> state + 1 | Decr -> state - 1
 
-let render state =
+let render ~state () =
   <div>
-    <button on_click=(event (fun _ -> Incr))> (string "+1") </button>
-    <button on_click=(event (fun _ -> Decr))> (string "-1") </button>
+    <button on_click=(on_click (fun _ -> Incr))> (string "+1") </button>
+    <button on_click=(on_click (fun _ -> Decr))> (string "-1") </button>
     <span>(string "you clicked me ")(int state)(string " times")</span>
   </div>

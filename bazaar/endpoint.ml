@@ -6,11 +6,14 @@ let trail =
   [
     use (module CORS) CORS.(config ~origin:"*" ());
     use (module Logger) Logger.(args ~level:Debug ());
-    use (module Sidewinder.Static) ();
+    use
+      (module Memory)
+      Memory.(config ~prefix:"/static" [ (module Bazaar_assets) ]);
     router
       [
-        get "/" Index.show;
-        live "/counter" (module Counter) ();
+        get "/" Sidewinder_trail.(live Layout.root (module Index_live));
+        socket "/live" (module Sidewinder_socket) ();
+        live "/counter" (module Counter);
         socket "/playground" (module Playground) ();
       ];
   ]

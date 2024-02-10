@@ -16,6 +16,8 @@ depends: [
   "serde_derive" {>= "0.0.1"}
   "serde_json" {>= "0.0.1"}
   "trail" {>= "0.0.1"}
+  "opam-check-npm-deps"
+  "ppx_deriving"
   "dune" {>= "3.12"}
   "ocaml"
   "melange"

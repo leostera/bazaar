@@ -1,0 +1,10 @@
+open Sidewinder.Html
+
+let root ~content () =
+  <html>
+    <body>
+    (content)
+    <script src="/static/main.js" />
+    </body>
+  </html>
+

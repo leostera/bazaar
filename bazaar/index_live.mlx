@@ -1,0 +1,34 @@
+
+open Serde
+open Sidewinder.Html
+include Sidewinder.Default
+
+type state = { counters : (string, Counter.state) Hashtbl.t }
+
+type action = Counter of string * Counter.action
+[@@deriving serializer,deserializer]
+
+let mount conn = 
+  let counters = Hashtbl.create 0 in
+  let add id = Hashtbl.replace counters id (Counter.mount conn) in
+  add "counter-1";
+  add "counter-2";
+  add "counter-3";
+  { counters }
+
+let handle_action {counters} (Counter (id, action)) = 
+  let () =match Hashtbl.find_opt counters id with
+  | None -> ()
+  | Some counter -> 
+      let counter = Counter.handle_action counter action in
+      Hashtbl.replace counters id counter
+  in
+  {counters}
+
+let render ~state:({counters}) () =
+  let counters = Hashtbl.to_seq counters |> List.of_seq in
+  (counters
+  |> List.map (fun (id, state) -> 
+      <Counter.render state=state />
+      |> map_action (fun action -> Counter (id, action)))
+  |> list)

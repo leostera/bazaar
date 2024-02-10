@@ -2,15 +2,15 @@ open Riot
 open Trail
 open Sidewinder.Html
 
-let page =
-  <html>
-    <body>
-      <Counter.mount path="/counter"/>
-      <Counter.mount path="/counter"/>
-      <Counter.mount path="/counter"/>
-      <Counter.mount path="/counter"/>
-    </body>
-  </html>
+let show (conn: Conn.t) =
+  let page =
+    <html>
+      <body>
+        <script src="/static/main.js" />
+      </body>
+    </html>
+  in
 
-let show (conn : Conn.t) =
-  conn |> Conn.send_response `OK (Sidewinder.Html.to_string page |> Bytestring.of_string)
+  let page = Sidewinder.Html.to_string page |> Bytestring.of_string in
+
+  conn |> Conn.send_response `OK page

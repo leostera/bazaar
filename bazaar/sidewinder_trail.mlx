@@ -1,0 +1,52 @@
+open Riot
+open Trail
+open Sidewinder
+open Sidewinder.Html
+
+open Riot.Logger.Make (struct
+  let namespace = [ "sidewinder"; "trail" ]
+end)
+
+let new_sw_id () = 
+  let nonce = Crypto.Random.string 10 |> Base64.encode_string in
+  (Format.sprintf "sw:%s" nonce)
+
+let rec update_handlers ?(idx = 0) (html : 'action Html.t) =
+  match html with
+  | Html.Text _ -> html
+  | Html.Splat els ->
+      Html.Splat (List.mapi (fun idx el -> update_handlers ~idx el) els)
+  | Html.El { tag; attrs; children } ->
+      trace (fun f -> f "found tag %S with %d attrs" tag (List.length attrs));
+      let attrs =
+        match Html.event_handlers attrs with
+        | [] -> attrs
+        | handlers ->
+            let attrs = ref attrs in
+            List.iteri
+              (fun n (event, _handler) ->
+                let id =
+                  "sidewinder-handler-" ^ Int.to_string idx ^ "-"
+                  ^ Int.to_string n
+                in
+                trace (fun f -> f "found handler %S" id);
+                attrs := [ `attr ("data-sw-event", event); `attr ("data-sw-el-id", id)] @ !attrs;
+                ())
+              handlers;
+            !attrs
+      in
+      let children = List.mapi (fun idx el -> update_handlers ~idx el) children in
+      Html.El { tag; attrs; children }
+
+let live (type action) (layout : content:action Html.t -> unit -> action Html.t)
+    (module View : Sidewinder.Intf with type action = action) (conn : Conn.t) =
+  let state = View.mount conn in
+  let view = View.render ~state () in
+  let view = update_handlers view in
+  let sw_id = new_sw_id () in
+  let content = 
+    <div attrs=[("sw-root","");("data-sw-id", sw_id)]> (view) </div>
+  in
+  let page = <layout content=content /> in
+  let data = page |> Html.to_string |> Bytestring.of_string in
+  conn |> Conn.send_response `OK data

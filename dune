@@ -1,0 +1,14 @@
+(library
+ (name bazaar_assets))
+
+(rule
+ (target ./bazaar_assets.ml)
+ (deps ./bazaar_js/dist/main.js)
+ (mode promote)
+ (action
+  (run
+   ocaml-crunch
+   ./bazaar_js/dist
+   --mode=plain
+   --silent
+   --output=%{target})))
